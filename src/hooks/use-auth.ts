@@ -11,7 +11,7 @@ interface AuthState {
 // and set the user to the state
 
 export const useAuth = create<AuthState>((set) => ({
-  isAuthenticated: false,
+  isAuthenticated: true,
   user: null,
   login: async (email, password) => {
     // Implement your login logic here

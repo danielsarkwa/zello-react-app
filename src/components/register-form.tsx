@@ -15,23 +15,23 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
       </div>
       <div className="grid gap-6">
         <div className="grid gap-2">
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" type="text" placeholder="John Doe" required />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="username">Username</Label>
+          <Input id="username" type="text" placeholder="johnny" required />
+        </div>
+        <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
           <Input id="email" type="email" placeholder="m@example.com" required />
         </div>
         <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
-            <Link
-              to="/auth/forgot-password"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
-            >
-              Forgot your password?
-            </Link>
-          </div>
+          <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" required />
         </div>
         <Button type="submit" className="w-full">
-          Login
+          Register
         </Button>
       </div>
       <div className="text-center text-sm">
