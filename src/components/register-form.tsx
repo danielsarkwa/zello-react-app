@@ -1,45 +1,122 @@
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form"
 import { Link } from "react-router"
 
+import { AccessLevel } from "@/types/accessLevel"
+import { RegisterFormValues, registerSchema } from "@/schemas/register"
+
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
+  const registerForm = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      userName: "",
+      email: "",
+      password: "",
+      accessLevel: AccessLevel.Member
+    }
+  })
+
+  function onSubmit(values: RegisterFormValues) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values)
+  }
+
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Create an account</h1>
-        <p className="text-balance text-sm text-muted-foreground">
-          Enter your details below to register your account
-        </p>
-      </div>
-      <div className="grid gap-6">
-        <div className="grid gap-2">
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" type="text" placeholder="John Doe" required />
+    <Form {...registerForm}>
+      <form
+        onSubmit={registerForm.handleSubmit(onSubmit)}
+        className={cn("flex flex-col gap-6", className)}
+        {...props}
+      >
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-2xl font-bold">Create an account</h1>
+          <p className="text-balance text-sm text-muted-foreground">
+            Enter your details below to register your account
+          </p>
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="username">Username</Label>
-          <Input id="username" type="text" placeholder="johnny" required />
+        <div className="grid gap-6">
+          <FormField
+            control={registerForm.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={registerForm.control}
+            name="userName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="johndoe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={registerForm.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="john@example.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={registerForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full">
+            Create account
+          </Button>
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+        <div className="text-center text-sm">
+          Already have an account?{" "}
+          <Link to="/auth/login" className="underline underline-offset-4">
+            Login
+          </Link>
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required />
-        </div>
-        <Button type="submit" className="w-full">
-          Register
-        </Button>
-      </div>
-      <div className="text-center text-sm">
-        Already have an account?{" "}
-        <Link to="/auth/login" className="underline underline-offset-4">
-          Login
-        </Link>
-      </div>
-    </form>
+      </form>
+    </Form>
   )
 }
