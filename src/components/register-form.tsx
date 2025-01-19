@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router"
+import { useNavigate } from "react-router"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -16,25 +17,28 @@ import {
   FormMessage
 } from "@/components/ui/form"
 
-import { AccessLevel } from "@/types/accessLevel"
 import { RegisterFormValues, registerSchema } from "@/schemas/register"
+import { registerUser } from "@/api/auth"
 
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
+  const navigate = useNavigate()
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
       userName: "",
       email: "",
-      password: "",
-      accessLevel: AccessLevel.Member
+      password: ""
     }
   })
 
-  function onSubmit(values: RegisterFormValues) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: RegisterFormValues) {
+    try {
+      await registerUser(values)
+      navigate("/auth/login") // to login and get the token
+    } catch (error) {
+      console.error("Registration failed:", error)
+    }
   }
 
   return (
@@ -106,7 +110,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
               </FormItem>
             )}
           />
-          
+
           <Button type="submit" className="w-full">
             Create account
           </Button>

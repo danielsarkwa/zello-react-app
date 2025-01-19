@@ -55,3 +55,49 @@ participant UI as 🖥️ React UI
     Store-->>Query: Invalidate Queries
     Query->>API: Refetch if needed
 ```
+
+## API Integration Data Flow
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Component/Page
+    participant Z as Zod Schema
+    participant Q as React Query
+    participant A as API Entity
+    participant S as API Schema
+    participant B as Backend API
+
+    U->>+C: Interact with UI
+    
+    alt Form Submission
+        C->>+Z: Validate Form Data
+        Z-->>-C: Return Validated Data
+    end
+
+    C->>+Q: Call useQuery/useMutation
+    
+    Q->>+A: Execute API Function
+    
+    A->>+A: Add Access Token
+    
+    A->>+B: Make API Request
+    
+    B-->>-A: Return Response
+    
+    A->>+S: Validate Response
+    
+    alt Validation Error
+        S-->>A: Schema Validation Error
+        A-->>Q: Return Type Error
+        Q-->>C: Surface Error to UI
+    else API Error (401, 500)
+        A-->>Q: Return API Error
+        Q-->>C: Surface Error to UI
+    else Success
+        S-->>-A: Return Typed Data
+        A-->>-Q: Cache & Return Data
+        Q-->>-C: Update UI
+    end
+    
+    C-->>-U: Show Result/Error
+```
