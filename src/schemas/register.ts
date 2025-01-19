@@ -5,7 +5,10 @@ import { z } from "zod"
 
 export const registerSchema = z.object({
   name: z.string().min(1, "Name is required").max(30),
-  userName: z.string().min(1, "Username is required").max(30),
+  userName: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(20, "Username must be less than 20 characters"),
   email: z
     .string()
     .min(1, "Email is required")

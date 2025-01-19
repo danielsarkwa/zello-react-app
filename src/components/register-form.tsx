@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { Link } from "react-router"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -14,7 +15,6 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
-import { Link } from "react-router"
 
 import { AccessLevel } from "@/types/accessLevel"
 import { RegisterFormValues, registerSchema } from "@/schemas/register"
@@ -106,6 +106,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
               </FormItem>
             )}
           />
+          
           <Button type="submit" className="w-full">
             Create account
           </Button>
