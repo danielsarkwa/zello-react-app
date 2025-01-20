@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { AccessLevel, AccessLevelEnum } from "@/types/accessLevel"
+import { AccessLevel, AccessLevelEnum } from "@/types/access-level"
 
 export const registerSchema = z.object({
   name: z.string().min(1, "Name is required").max(30),

@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router"
-import { useNavigate } from "react-router"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -18,10 +17,11 @@ import {
 } from "@/components/ui/form"
 
 import { RegisterFormValues, registerSchema } from "@/schemas/register"
-import { registerUser } from "@/api/auth"
+import { registerUser } from "@/feature/auth"
 
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
-  const navigate = useNavigate()
+  const register = registerUser()
+
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -32,14 +32,9 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
     }
   })
 
-  async function onSubmit(values: RegisterFormValues) {
-    try {
-      await registerUser(values)
-      navigate("/auth/login") // to login and get the token
-    } catch (error) {
-      console.error("Registration failed:", error)
-    }
-  }
+  const onSubmit = (values: RegisterFormValues) => {
+    register.mutate(values);
+  };
 
   return (
     <Form {...registerForm}>

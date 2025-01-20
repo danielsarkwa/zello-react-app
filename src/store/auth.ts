@@ -24,3 +24,5 @@ export const useAuth = create<AuthState>((set) => ({
     set({ isAuthenticated: false, user: null })
   }
 }))
+
+

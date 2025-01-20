@@ -62,9 +62,10 @@ sequenceDiagram
     participant U as User
     participant C as Component/Page
     participant Z as Zod Schema
-    participant Q as React Query
-    participant A as API Entity
-    participant S as API Schema
+    participant Q as Tanstack Query
+    participant A as Entity API
+    participant I as API Interceptor
+    participant S as Entity Schema
     participant B as Backend API
 
     U->>+C: Interact with UI
@@ -78,25 +79,31 @@ sequenceDiagram
     
     Q->>+A: Execute API Function
     
-    A->>+A: Add Access Token
+    A->>+I: Make Request
     
-    A->>+B: Make API Request
+    I->>+I: Add Access Token
     
-    B-->>-A: Return Response
+    I->>+B: Forward Request
     
-    A->>+S: Validate Response
+    B-->>-I: Return Response
     
-    alt Validation Error
-        S-->>A: Schema Validation Error
-        A-->>Q: Return Type Error
-        Q-->>C: Surface Error to UI
-    else API Error (401, 500)
-        A-->>Q: Return API Error
+    alt API Error (401, 500)
+        I-->>A: Handle API Error
+        A-->>Q: Return Error
         Q-->>C: Surface Error to UI
     else Success
-        S-->>-A: Return Typed Data
-        A-->>-Q: Cache & Return Data
-        Q-->>-C: Update UI
+        I-->>-A: Return Response
+        
+        A->>+S: Validate Response
+        alt Schema Validation Error
+            S-->>A: Schema Error
+            A-->>Q: Return Type Error
+            Q-->>C: Surface Error to UI
+        else Success
+            S-->>-A: Return Typed Data
+            A-->>-Q: Cache & Return Data
+            Q-->>-C: Update UI
+        end
     end
     
     C-->>-U: Show Result/Error

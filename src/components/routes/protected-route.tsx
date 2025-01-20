@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/store/auth"
 import { Navigate, useLocation } from "react-router"
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {

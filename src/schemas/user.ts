@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { AccessLevel } from "@/types/accessLevel"
+import { AccessLevel } from "@/types/access-level"
 
 export const userSchema = z.object({
   id: z.string().uuid(),
