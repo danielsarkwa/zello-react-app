@@ -1,5 +1,7 @@
 import * as React from "react"
-import { Command, Frame, Gauge, LayoutList, Users } from "lucide-react"
+import { useLocation } from "react-router"
+
+import { Command, Frame, Gauge, LayoutList, Users, FolderKanban } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
@@ -33,6 +35,11 @@ const data = {
       icon: LayoutList
     },
     {
+      title: "Projects",
+      url: "/projects",
+      icon: FolderKanban
+    },
+    {
       title: "Members",
       url: "/members",
       icon: Users
@@ -62,7 +69,18 @@ const data = {
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { userProfile } = useAuthStore()
-  console.log("userProfile", userProfile)
+  const location = useLocation()
+
+  const mainNavItems = data.navMain.map((item) => ({
+    ...item,
+    isActive: location.pathname === item.url
+  }))
+
+  const projectItems = data.projects.map((project) => ({
+    ...project,
+    isActive: location.pathname === project.url
+  }))
+
   const user = {
     username: userProfile?.username || data.user.username,
     email: userProfile?.email || data.user.email
@@ -88,8 +106,8 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={mainNavItems} />
+        <NavProjects projects={projectItems} />
         {/* add primary botton */}
       </SidebarContent>
       <SidebarFooter>

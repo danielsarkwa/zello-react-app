@@ -26,10 +26,17 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild tooltip={item.title}>
+            <SidebarMenuButton
+              asChild
+              tooltip={item.title}
+              className={`${
+                item.isActive &&
+                "bg-gray-300/25 dark:bg-gray-800 hover:bg-gray-300/35 dark:hover:bg-gray-800/85"
+              }`}
+            >
               <a href={item.url}>
-                <item.icon />
-                <span>{item.title}</span>
+                <item.icon className={`${item.isActive && "text-primary"}`} />
+                <span className={`${item.isActive && "text-primary"}`}>{item.title}</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
