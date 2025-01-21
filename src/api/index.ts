@@ -1,6 +1,8 @@
+import { useAuthStore } from "@/store/auth"
 import { ErrorType, StandardError } from "@/types/standard-error"
 import axios, { AxiosError } from "axios"
 import { ZodError } from "zod"
+import { NavigationService } from "@/services/navigation"
 
 const isDevelopment = import.meta.env.MODE === "development"
 let baseURL = "http://localhost:4321/api/v1"
@@ -38,22 +40,15 @@ const handleAxiosError = (error: AxiosError): StandardError => {
     return {
       status: 0,
       message: "Network error",
-      type: ErrorType.NetworkError,
+      type: ErrorType.NetworkError
     }
   }
 
-  // if (error.response?.status === 401) {
-    // localStorage.removeItem("token")
-    // window.location.href = "/login"
-    // remove the token and move them to login page
-  // }
-  
   if (error.response?.status === 401) {
     return {
       status: 401,
       message: "Authentication required",
-      type: ErrorType.UnauthorizedError,
-      // add action to redirect to login page
+      type: ErrorType.UnauthorizedError
     }
   }
 
@@ -63,6 +58,35 @@ const handleAxiosError = (error: AxiosError): StandardError => {
     type: ErrorType.APIError
   }
 }
+
+export const isTokenExpired = () => {
+  const { expires } = useAuthStore.getState()
+  if (!expires) return true
+
+  return new Date(expires) <= new Date()
+}
+
+api.interceptors.request.use((config) => {
+  // Skip token expiration check for register and login requests
+  if (config.url?.includes("/register") || config.url?.includes("/login")) {
+    return config
+  }
+
+  if (isTokenExpired()) {
+    console.log("Token expired")
+    // an improvement would be get a new token using the refresh token
+    useAuthStore.getState().clearAuth()
+    NavigationService.navigateToLogin()
+    return Promise.reject(new Error("Token expired, try logging in again."))
+  }
+
+  const { token } = useAuthStore.getState()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
+  return config
+})
 
 api.interceptors.response.use(
   (response) => response,
@@ -76,7 +100,7 @@ api.interceptors.response.use(
     } else {
       standardError = {
         status: 500,
-        message: error instanceof Error ? error.message : "An unknown error occurred",
+        message: error instanceof Error ? error.message : "An unknown error occurred.",
         type: ErrorType.UnknownError
       }
     }

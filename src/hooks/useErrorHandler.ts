@@ -37,7 +37,7 @@ export const useErrorHandler = () => {
     if (error.type === ErrorType.NetworkError) {
       toast({
         title: "Network Error",
-        description: "Please check your internet connection",
+        description: "Please check your internet connection.",
         variant: "destructive",
         duration: 5000
       })
@@ -56,8 +56,8 @@ export const useErrorHandler = () => {
 
     // Default error message
     toast({
-      title: "Error",
-      description: error.message || "An unexpected error occurred",
+      title: "Error Message",
+      description: error.message || "An unexpected error occurred.",
       variant: "destructive"
     })
   }

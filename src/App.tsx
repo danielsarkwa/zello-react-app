@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router"
+import { Routes, Route, Navigate, useNavigate } from "react-router"
 import AppLayout from "@/components/layout/app-layout"
 import AuthLayout from "@/components/layout/auth-layout"
 import DashboardPage from "@/pages/dashboard"
@@ -12,8 +12,16 @@ import LoginPage from "./pages/login"
 import RegisterPage from "./pages/register"
 import ForgotPasswordPage from "@/pages/forgot-password"
 import { ProtectedRoute } from "@/components/routes/protected-route"
+import { useEffect } from "react"
+import { NavigationService } from "./services/navigation"
 
 function App() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    NavigationService.setNavigate(navigate)
+  }, [navigate])
+
   return (
     <Routes>
       {/* Public routes */}

@@ -17,8 +17,11 @@ import {
 } from "@/components/ui/form"
 
 import { LoginFormValues, loginSchema } from "@/schemas/login"
+import { loginUser } from "@/feature/auth"
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
+  const login = loginUser()
+
   const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -27,10 +30,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     }
   })
 
-  function onSubmit(values: LoginFormValues) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  const onSubmit = (values: LoginFormValues) => {
+    login.mutate(values)
   }
 
   return (
