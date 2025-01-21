@@ -1,16 +1,7 @@
-import { useCurrentUser } from "@/feature/auth"
-import { useEffect } from "react"
+// Reponsible for show the workspaces analitics, recent activities, quick actions, etc
+// For now, this can just get the workspsace details
 
 export default function DashboardPage() {
-  const { mutate: getCurrentUser } = useCurrentUser()
-
-  useEffect(() => {
-    console.log("app reloaded in invalid token, but i'm getting data from api")
-    const profile = getCurrentUser()
-
-    console.log(profile)
-  }, [getCurrentUser])
-
   return (
     <div className="flex">
       <h2>dashboard page</h2>
