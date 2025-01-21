@@ -1,6 +1,6 @@
 import { NavigateFunction } from "react-router"
 
-export class NavigationService {
+export default class NavigationService {
   private static navigate: NavigateFunction | null = null
 
   static setNavigate(navigate: NavigateFunction) {

@@ -1,7 +1,11 @@
 import api from "./index"
 import { User, userSchema } from "@/schemas/user"
 import { RegisterFormValues } from "@/schemas/register"
-import { LoginFormValues, LoginResponse, loginResponseSchema } from "@/schemas/login"
+import {
+  LoginFormValues,
+  LoginResponse,
+  loginResponseSchema
+} from "@/schemas/login"
 
 const register = async (data: RegisterFormValues): Promise<User> => {
   const response = await api.post("/user/register", data)
@@ -61,7 +65,7 @@ const getCurrentUser = async (): Promise<User> => {
 const AuthService = {
   register,
   login,
-  getCurrentUser
+  getCurrentUser,
 }
 
 export default AuthService

@@ -1,8 +1,10 @@
-import { useAuthStore } from "@/store/auth"
-import { ErrorType, StandardError } from "@/types/standard-error"
-import axios, { AxiosError } from "axios"
 import { ZodError } from "zod"
-import { NavigationService } from "@/services/navigation"
+import axios, { AxiosError } from "axios"
+
+import { useAuthStore } from "@/store/auth"
+import NavigationService from "@/feature/navigation"
+
+import { ErrorType, StandardError } from "@/types/standard-error"
 
 const isDevelopment = import.meta.env.MODE === "development"
 let baseURL = "http://localhost:4321/api/v1"
@@ -66,11 +68,9 @@ export const isTokenExpired = () => {
   return new Date(expires) <= new Date()
 }
 
-api.interceptors.request.use((config) => {
-  // Skip token expiration check for register and login requests
-  if (config.url?.includes("/register") || config.url?.includes("/login")) {
-    return config
-  }
+api.interceptors.request.use(async (config) => {
+  const isPublicRoute = ["/register", "/login"].some((route) => config.url?.includes(route))
+  if (isPublicRoute) return config
 
   if (isTokenExpired()) {
     // an improvement would be get a new token using the refresh token
