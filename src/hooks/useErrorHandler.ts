@@ -1,8 +1,10 @@
 import { useToast } from "@/hooks/use-toast"
 import { ErrorType, StandardError } from "@/types/standard-error"
+import { useNavigate } from "react-router"
 
 export const useErrorHandler = () => {
   const { toast } = useToast()
+  const Navigate = useNavigate()
 
   const handleError = (
     error: StandardError,
@@ -34,10 +36,21 @@ export const useErrorHandler = () => {
       return
     }
 
+    if (error.type === ErrorType.UnauthorizedError) {
+      toast({
+        title: "Session Expired",
+        description: error.message,
+        variant: "destructive",
+        duration: 10000
+      })
+      Navigate("/auth/login")
+      return
+    }
+
     if (error.type === ErrorType.NetworkError) {
       toast({
         title: "Network Error",
-        description: "Please check your internet connection.",
+        description: error.message,
         variant: "destructive",
         duration: 5000
       })

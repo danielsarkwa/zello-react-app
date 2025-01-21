@@ -39,7 +39,7 @@ const handleAxiosError = (error: AxiosError): StandardError => {
   if (!error.response) {
     return {
       status: 0,
-      message: "Network error",
+      message: "Please check your internet connection.",
       type: ErrorType.NetworkError
     }
   }
@@ -47,7 +47,7 @@ const handleAxiosError = (error: AxiosError): StandardError => {
   if (error.response?.status === 401) {
     return {
       status: 401,
-      message: "Authentication required",
+      message: "Your session has expired. Please log in again.",
       type: ErrorType.UnauthorizedError
     }
   }
@@ -73,7 +73,6 @@ api.interceptors.request.use((config) => {
   }
 
   if (isTokenExpired()) {
-    console.log("Token expired")
     // an improvement would be get a new token using the refresh token
     useAuthStore.getState().clearAuth()
     NavigationService.navigateToLogin()
