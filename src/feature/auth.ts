@@ -18,11 +18,12 @@ export const registerUser = () => {
       toast({
         title: "Registration Successful",
         description: "Redirecting you to login page...",
-        className: "bg-green-500 text-white border-green-500",
+        className:
+          "bg-green-500 text-white border-green-500 dark:bg-green-700 dark:text-white dark:border-green-700",
         duration: 6000
       })
       setTimeout(() => {
-        navigate("/login")
+        navigate("/auth/login")
       }, 1500)
     },
     onError: (error: StandardError) =>
@@ -39,6 +40,7 @@ export const loginUser = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
   const { setAuth } = useAuthStore()
+  const { mutate: getCurrentUser } = useCurrentUser()
 
   return useMutation({
     mutationFn: AuthService.login,
@@ -46,10 +48,12 @@ export const loginUser = () => {
       setAuth(response)
       toast({
         title: "Login Successful",
-        description: "Redirecting you to dashboard...",
-        className: "bg-green-500 text-white border-green-500",
-        duration: 2000
+        description: "Welcome to Zello",
+        className:
+          "bg-green-500 text-white border-green-500 dark:bg-green-700 dark:text-white dark:border-green-700",
+        duration: 1000
       })
+      getCurrentUser()
       const from = location.state?.from?.pathname || "/dashboard"
       navigate(from, { replace: true })
     },
@@ -59,4 +63,36 @@ export const loginUser = () => {
         401: "Invalid username or password"
       })
   })
+}
+
+export const useCurrentUser = () => {
+  const handleError = useErrorHandler()
+
+  return useMutation({
+    mutationFn: AuthService.getCurrentUser,
+    onSuccess: (user: User) => {
+      useAuthStore.getState().setUserProfile(user)
+    },
+    onError: (error: StandardError) => {
+      // improve this by providing a recovery mechanism
+      handleError(error)
+    }
+  })
+}
+
+export const logoutUser = () => {
+  const navigate = useNavigate()
+  const { toast } = useToast()
+  const { clearAuth } = useAuthStore()
+
+  return () => {
+    clearAuth()
+    toast({
+      title: "Logout Successful",
+      description: "You have been logged out.",
+      className: "bg-green-500 text-white border-green-500",
+      duration: 2000
+    })
+    navigate("/auth/login")
+  }
 }

@@ -13,12 +13,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar"
+import { useAuthStore } from "@/store/auth"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg"
+    username: "[username]",
+    email: "[email]"
   },
   navMain: [
     {
@@ -61,6 +61,13 @@ const data = {
 }
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { userProfile } = useAuthStore()
+  console.log("userProfile", userProfile)
+  const user = {
+    username: userProfile?.username || data.user.username,
+    email: userProfile?.email || data.user.email
+  }
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -86,7 +93,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
         {/* add primary botton */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )

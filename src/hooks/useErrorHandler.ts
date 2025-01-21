@@ -29,7 +29,7 @@ export const useErrorHandler = () => {
 
     if (error.type === ErrorType.APIError) {
       toast({
-        title: `API Error ${error.status}`,
+        title: `Uh oh! Something went wrong :: ${error.status}`,
         description: error.message,
         variant: "destructive"
       })
@@ -38,12 +38,22 @@ export const useErrorHandler = () => {
 
     if (error.type === ErrorType.UnauthorizedError) {
       toast({
-        title: "Session Expired",
+        title: "Uh oh! Your session expired",
         description: error.message,
         variant: "destructive",
-        duration: 10000
+        duration: 9000
       })
       Navigate("/auth/login")
+      return
+    }
+
+    if (error.type === ErrorType.AuthenticationError) {
+      toast({
+        title: "Error logging in",
+        description: error.message,
+        variant: "destructive",
+        duration: 7000
+      })
       return
     }
 
