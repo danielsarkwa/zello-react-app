@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Link } from "react-router"
@@ -75,8 +76,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Login
+          <Button type="submit" className="w-full" disabled={login.isPending}>
+            {login.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Logging in
+              </>
+            ) : (
+              "Login"
+            )}
           </Button>
         </div>
         <div className="text-center text-sm">

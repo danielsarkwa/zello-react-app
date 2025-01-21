@@ -18,6 +18,7 @@ import {
 
 import { RegisterFormValues, registerSchema } from "@/schemas/register"
 import { registerUser } from "@/feature/auth"
+import { Loader2 } from "lucide-react"
 
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
   const register = registerUser()
@@ -33,8 +34,8 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
   })
 
   const onSubmit = (values: RegisterFormValues) => {
-    register.mutate(values);
-  };
+    register.mutate(values)
+  }
 
   return (
     <Form {...registerForm}>
@@ -106,8 +107,15 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
             )}
           />
 
-          <Button type="submit" className="w-full">
-            Create account
+          <Button type="submit" className="w-full" disabled={register.isPending}>
+            {register.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Creating account
+              </>
+            ) : (
+              "Create account"
+            )}
           </Button>
         </div>
         <div className="text-center text-sm">
