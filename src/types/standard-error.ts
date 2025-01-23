@@ -1,5 +1,6 @@
 export enum ErrorType {
-  ValidationError = "ValidationError",
+  ZodValidationError = "ZodValidationError",
+  APIValidationError = "APIValidationError",
   APIError = "APIError",
   NetworkError = "NetworkError",
   UnknownError = "UnknownError",

@@ -9,6 +9,4 @@ export const workspaceMemberSchema = z.object({
   createdDate: z.string().datetime()
 })
 
-// add Workspace and User to the workspace member schema
-
 export type WorkspaceMember = z.infer<typeof workspaceMemberSchema>

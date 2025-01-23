@@ -21,13 +21,13 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { useTheme } from "@/components/theme-provider"
 
-import { User } from "@/schemas/user"
 import { useAuthStore } from "@/store/auth"
 
-export function NavUser({ user }: { user: Pick<User, "username" | "email"> }) {
+export function NavUser() {
   const { isMobile } = useSidebar()
   const { theme, setTheme } = useTheme()
   const { clearAuth } = useAuthStore()
+  const { userProfile } = useAuthStore()
 
   const handleLogout = () => {
     clearAuth()
@@ -46,8 +46,10 @@ export function NavUser({ user }: { user: Pick<User, "username" | "email"> }) {
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.username}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-semibold">
+                  {userProfile?.username || "[username]"}
+                </span>
+                <span className="truncate text-xs">{userProfile?.email || "[email address]"}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -64,8 +66,8 @@ export function NavUser({ user }: { user: Pick<User, "username" | "email"> }) {
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.username}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-semibold">{userProfile?.username || "[username]"}</span>
+                  <span className="truncate text-xs">{userProfile?.email || "[email address]"}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

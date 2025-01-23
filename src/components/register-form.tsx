@@ -20,6 +20,12 @@ import { RegisterFormValues, registerSchema } from "@/schemas/register"
 import { registerUser } from "@/feature/auth"
 import { Loader2 } from "lucide-react"
 
+/**
+ * @Todo
+ * - move the form hanlding logic to the parent component
+ * - the onSubmit function should be passed as a prop
+ */
+
 export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
   const register = registerUser()
 

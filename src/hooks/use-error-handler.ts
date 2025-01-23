@@ -14,14 +14,23 @@ export const useErrorHandler = () => {
       [key: number]: string // For specific HTTP status codes
     }
   ) => {
-    if (error.type === ErrorType.ValidationError) {
+    if (error.type === ErrorType.ZodValidationError) {
       const errorMessages = Object.entries(error.errors || {})
         .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
         .join("\n")
 
       toast({
-        title: customMessages?.validation || "Validation Error",
+        title: customMessages?.validation || "Ooops! Zod has a validation error",
         description: errorMessages,
+        variant: "destructive"
+      })
+      return
+    }
+
+    if (error.type === ErrorType.APIValidationError) {
+      toast({
+        title: customMessages?.validation || "Ooops! Your request was invalid",
+        description: error.message,
         variant: "destructive"
       })
       return
@@ -70,7 +79,7 @@ export const useErrorHandler = () => {
     // Check for specific status code messages
     if (error.status && customMessages?.[error.status]) {
       toast({
-        title: "Error",
+        title: "Error Message",
         description: customMessages[error.status],
         variant: "destructive"
       })

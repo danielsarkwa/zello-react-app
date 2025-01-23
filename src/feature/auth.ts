@@ -1,11 +1,12 @@
 import { useMutation } from "@tanstack/react-query"
-import { useLocation, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 import AuthService from "@/api/auth"
-import { useErrorHandler } from "@/hooks/useErrorHandler"
+import { useErrorHandler } from "@/hooks/use-error-handler"
 import { StandardError } from "@/types/standard-error"
 import { User } from "@/schemas/user"
 import { useToast } from "@/hooks/use-toast"
 import { useAuthStore } from "@/store/auth"
+import { useWorkspaceStore } from "@/store/workspace"
 
 export const registerUser = () => {
   const handleError = useErrorHandler()
@@ -36,7 +37,6 @@ export const registerUser = () => {
 
 export const loginUser = () => {
   const handleError = useErrorHandler()
-  const location = useLocation()
   const navigate = useNavigate()
   const { toast } = useToast()
   const { setAuth } = useAuthStore()
@@ -54,8 +54,7 @@ export const loginUser = () => {
         duration: 1000
       })
       getCurrentUser()
-      const from = location.state?.from?.pathname || "/dashboard"
-      navigate(from, { replace: true })
+      navigate("/load-workspaces")
     },
     onError: (error: StandardError) =>
       handleError(error, {
@@ -84,9 +83,12 @@ export const logoutUser = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
   const { clearAuth } = useAuthStore()
+  const { clearWorkspace } = useWorkspaceStore()
 
   return () => {
     clearAuth()
+    clearWorkspace()
+
     toast({
       title: "Logout Successful",
       description: "You have been logged out.",

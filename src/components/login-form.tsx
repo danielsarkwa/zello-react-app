@@ -20,10 +20,16 @@ import {
 import { LoginFormValues, loginSchema } from "@/schemas/login"
 import { loginUser } from "@/feature/auth"
 
+/**
+ * @Todo
+ * - move the form hanlding logic to the parent component
+ * - the onSubmit function should be passed as a prop
+ */
+
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
   const login = loginUser()
 
-  const loginForm = useForm<LoginFormValues>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
@@ -36,9 +42,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   }
 
   return (
-    <Form {...loginForm}>
+    <Form {...form}>
       <form
-        onSubmit={loginForm.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className={cn("flex flex-col gap-6", className)}
         {...props}
       >
@@ -50,7 +56,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         </div>
         <div className="grid gap-6">
           <FormField
-            control={loginForm.control}
+            control={form.control}
             name="username"
             render={({ field }) => (
               <FormItem>
@@ -64,7 +70,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           />
 
           <FormField
-            control={loginForm.control}
+            control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem>

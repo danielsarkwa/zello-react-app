@@ -32,12 +32,11 @@ const handleZodError = (error: ZodError): StandardError => {
     status: 422,
     message: "Validation failed",
     errors,
-    type: ErrorType.ValidationError
+    type: ErrorType.ZodValidationError
   }
 }
 
 const handleAxiosError = (error: AxiosError): StandardError => {
-  // Handle network errors
   if (!error.response) {
     return {
       status: 0,
@@ -46,18 +45,59 @@ const handleAxiosError = (error: AxiosError): StandardError => {
     }
   }
 
-  if (error.response?.status === 401) {
+  const data = error.response.data as any
+
+  // Handle ASP.NET validation errors
+  if (data?.errors && data?.title?.includes("validation errors")) {
+    const formattedErrors: Record<string, string[]> = {}
+
+    // Convert ASP.NET error structure to our standard format
+    Object.entries(data.errors).forEach(([field, messages]) => {
+      formattedErrors[field.toLowerCase()] = Array.isArray(messages)
+        ? messages
+        : [messages as string]
+    })
+
     return {
-      status: 401,
-      message: (error.response.data as { message?: string }).message || "Unauthorized",
-      type: ErrorType.AuthenticationError
+      status: error.response.status,
+      message: "Validation failed",
+      errors: formattedErrors,
+      type: ErrorType.APIValidationError
     }
   }
 
-  return {
-    status: error.response?.status || 500,
-    message: error.message || "An API error occurred",
-    type: ErrorType.APIError
+  // Handle other status codes
+  switch (error.response.status) {
+    case 401:
+      return {
+        status: 401,
+        message: data?.message || "Unauthorized",
+        type: ErrorType.AuthenticationError
+      }
+    case 403:
+      return {
+        status: 403,
+        message: data?.message || "Forbidden",
+        type: ErrorType.UnauthorizedError
+      }
+    case 404:
+      return {
+        status: 404,
+        message: data?.message || "Not found",
+        type: ErrorType.NotFoundError
+      }
+    case 500:
+      return {
+        status: 500,
+        message: data?.message || "Internal server error",
+        type: ErrorType.InternalServerError
+      }
+    default:
+      return {
+        status: error.response.status,
+        message: data?.message || "An error occurred",
+        type: ErrorType.APIError
+      }
   }
 }
 

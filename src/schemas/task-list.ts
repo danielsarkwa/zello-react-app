@@ -8,6 +8,8 @@ export const taskListSchema = z.object({
   createdDate: z.string().datetime()
 })
 
-// add Project, Tasks
+export const TaskListWithTasksSchema = taskListSchema.extend({
+  tasks: z.array(taskListSchema).optional()
+})
 
 export type TaskList = z.infer<typeof taskListSchema>

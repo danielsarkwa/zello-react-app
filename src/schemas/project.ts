@@ -12,6 +12,14 @@ export const projectSchema = z.object({
   createdDate: z.string().datetime()
 })
 
-// add Workspace, Members, and Tasks to the project schema
+export const ProjectWithDetailsSchema = projectSchema.extend({
+  workspace: z.lazy(() => workspaceSchema).optional(),
+  lists: z.lazy(() => z.array(taskListSchema)).optional(),
+  members: z.lazy(() => z.array(workspaceMemberSchema)).optional()
+})
+
+import { workspaceSchema } from "@/schemas/workspace"
+import { taskListSchema } from "@/schemas/task-list"
+import { workspaceMemberSchema } from "@/schemas/workspace-member"
 
 export type Project = z.infer<typeof projectSchema>

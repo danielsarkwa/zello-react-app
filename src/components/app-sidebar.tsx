@@ -1,33 +1,22 @@
 import * as React from "react"
 import { useLocation } from "react-router"
 
-import { Command, Frame, Gauge, LayoutList, Users, FolderKanban } from "lucide-react"
+import { Gauge, LayoutList, Users, FolderKanban } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem
-} from "@/components/ui/sidebar"
-import { useAuthStore } from "@/store/auth"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar"
+import { WorkspaceSwitcher } from "@/components/workspace-switch"
 
-const data = {
-  user: {
-    username: "[username]",
-    email: "[email]"
-  },
-  navMain: [
+export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation()
+
+  const navMain = [
     {
       title: "Dashboard",
       url: "/dashboard",
-      icon: Gauge,
-      isActive: true
+      icon: Gauge
     },
     {
       title: "Task Board",
@@ -44,74 +33,25 @@ const data = {
       url: "/members",
       icon: Users
     }
-  ],
-  projects: [
-    {
-      // add project id
-      name: "Design Engineering",
-      url: "/projects/123e4567-e89b-12d3-a456-426614174000",
-      icon: Frame
-    },
-    {
-      // add project id
-      name: "Sales & Marketing",
-      url: "/projects/987fcdeb-51a2-43d8-b789-012345678901",
-      icon: Frame
-    },
-    {
-      // add project id
-      name: "Travel",
-      url: "/projects/550e8400-e29b-41d4-a716-446655440000",
-      icon: Frame
-    }
   ]
-}
 
-export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { userProfile } = useAuthStore()
-  const location = useLocation()
-
-  const mainNavItems = data.navMain.map((item) => ({
+  const mainNavItems = navMain.map((item) => ({
     ...item,
     isActive: location.pathname === item.url
   }))
 
-  const projectItems = data.projects.map((project) => ({
-    ...project,
-    isActive: location.pathname === project.url
-  }))
-
-  const user = {
-    username: userProfile?.username || data.user.username,
-    email: userProfile?.email || data.user.email
-  }
-
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <WorkspaceSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={mainNavItems} />
-        <NavProjects projects={projectItems} />
+        <NavMain items={mainNavItems} /> {/* encapsulate nav logic to component */}
+        <NavProjects />
         {/* add primary botton */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

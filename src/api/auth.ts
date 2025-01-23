@@ -1,4 +1,4 @@
-import api from "./index"
+import api from "."
 import { User, userSchema } from "@/schemas/user"
 import { RegisterFormValues } from "@/schemas/register"
 import {

@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { userSchema } from "@/schemas/user"
 
 export const commentSchema = z.object({
   id: z.string().uuid(),
@@ -9,5 +10,8 @@ export const commentSchema = z.object({
 })
 
 // add task and user to the comment schema
+export const CommentWithDetailsSchema = commentSchema.extend({
+  user: userSchema.optional()
+})
 
 export type Comment = z.infer<typeof commentSchema>

@@ -3,7 +3,10 @@ import { Routes, Route, Navigate, useNavigate } from "react-router"
 
 import AppLayout from "@/components/layout/app-layout"
 import AuthLayout from "@/components/layout/auth-layout"
+import WorkspaceLayout from "./components/layout/workspace-layout"
 
+import WorkspacePage from "./pages/workspaces"
+import CreateWorkspace from "@/components/create-workspace"
 import DashboardPage from "@/pages/dashboard"
 import TaskBoardPage from "@/pages/task-board"
 import ProjectsPage from "@/pages/projects"
@@ -34,6 +37,18 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      </Route>
+
+      {/* Load workspaces route */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <WorkspaceLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/load-workspaces" element={<WorkspacePage />} />
+        <Route path="/create-workspace" element={<CreateWorkspace />} />
       </Route>
 
       {/* Protected routes wrapped in AppLayout */}
