@@ -40,7 +40,7 @@ export function NavProjects() {
           const isActive = location.pathname === `/projects/${project.id}`
 
           return (
-            <SidebarMenuItem key={project.name}>
+            <SidebarMenuItem key={project.id}>
               <SidebarMenuButton
                 asChild
                 tooltip={project.name}

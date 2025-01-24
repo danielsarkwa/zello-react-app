@@ -1,7 +1,9 @@
+import { KanbanBoard } from "@/components/kanban-board"
+
 export default function ProjectDetailsPage() {
   return (
-    <div className="flex">
-      <h2>Project details page</h2>
+    <div className="w-full h-full flex">
+      <KanbanBoard />
     </div>
   )
 }

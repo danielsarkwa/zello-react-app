@@ -1,7 +1,9 @@
+import { KanbanBoard } from "@/components/kanban-board"
+
 export default function TaskBoardPage() {
   return (
-    <div className="flex">
-      <h2>Task board page</h2>
+    <div className="w-full h-full flex">
+      <KanbanBoard />
     </div>
   )
 }
