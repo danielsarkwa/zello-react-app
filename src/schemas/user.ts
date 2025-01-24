@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { AccessLevel } from "@/types/access-level"
+import { AccessLevelString } from "@/types/access-level"
 
 export const userSchema = z.object({
   id: z.string().uuid(),
@@ -7,7 +7,7 @@ export const userSchema = z.object({
   name: z.string().min(1).max(30),
   email: z.string().email().max(100),
   createdDate: z.string().datetime(),
-  accessLevel: AccessLevel
+  accessLevel: AccessLevelString
 })
 
 export type User = z.infer<typeof userSchema>

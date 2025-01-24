@@ -17,7 +17,7 @@ export default function AppLayout() {
             <BreadcrumbNav />
           </div>
         </header>
-        <main className="p-5">
+        <main className="p-5 flex-1">
           <Outlet />
         </main>
       </SidebarInset>

@@ -6,12 +6,14 @@ interface EmptyStateProps {
   title: string
   description?: string
   icon?: React.ReactNode
+  button?: React.ReactNode
 }
 
 export default function EmptyState({
   title = "No data found",
   description = "There is no data was found at the moment.",
-  icon = <FileText size={24} />
+  icon = <FileText size={24} />,
+  button
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[250px] p-4 text-center relative">
@@ -21,9 +23,8 @@ export default function EmptyState({
 
       <div>
         <h2 className="text-xl font-semibold">{title}</h2>
-        <p className="leading-7 text-base max-w-[600px] text-muted-foreground">
-          {description}
-        </p>
+        <p className="leading-7 text-base max-w-[600px] text-muted-foreground">{description}</p>
+        {button && <div className="mt-4">{button}</div>}
       </div>
     </div>
   )

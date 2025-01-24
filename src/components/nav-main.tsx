@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar"
+import { Link } from "react-router"
 
 export function NavMain({
   items
@@ -34,10 +35,10 @@ export function NavMain({
                 "bg-gray-300/25 dark:bg-gray-800 hover:bg-gray-300/35 dark:hover:bg-gray-800/85"
               }`}
             >
-              <a href={item.url}>
+              <Link to={item.url}>
                 <item.icon className={`${item.isActive && "text-primary"}`} />
                 <span className={`${item.isActive && "text-primary"}`}>{item.title}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

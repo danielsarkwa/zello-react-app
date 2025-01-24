@@ -51,16 +51,12 @@ const handleAxiosError = (error: AxiosError): StandardError => {
   if (data?.errors && data?.title?.includes("validation errors")) {
     const formattedErrors: Record<string, string[]> = {}
 
-    // Convert ASP.NET error structure to our standard format
-    Object.entries(data.errors).forEach(([field, messages]) => {
-      formattedErrors[field.toLowerCase()] = Array.isArray(messages)
-        ? messages
-        : [messages as string]
-    })
+    const descriptionMessages = data.errors.Description || []
+    const message = Array.isArray(descriptionMessages) ? descriptionMessages.join(", ") : descriptionMessages
 
     return {
       status: error.response.status,
-      message: "Validation failed",
+      message: message || "Validation failed",
       errors: formattedErrors,
       type: ErrorType.APIValidationError
     }

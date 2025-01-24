@@ -1,10 +1,18 @@
 import { z } from "zod"
 
-export enum AccessLevelEnum {
-  Admin = "Admin",
-  Member = "Member",
-  Owner = "Owner",
-  Guest = "Guest"
+export enum AccessLevelNumericEnum {
+  Guest = 0,
+  Member = 10,
+  Owner = 20,
+  Admin = 30
 }
 
-export const AccessLevel = z.nativeEnum(AccessLevelEnum)
+export enum AccessLevelStringEnum {
+  Guest = "Guest",
+  Member = "Member",
+  Owner = "Owner",
+  Admin = "Admin"
+}
+
+export const AccessLevelNumeric = z.nativeEnum(AccessLevelNumericEnum)
+export const AccessLevelString = z.nativeEnum(AccessLevelStringEnum)

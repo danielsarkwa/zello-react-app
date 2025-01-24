@@ -1,5 +1,5 @@
 import React from "react"
-import { useLocation } from "react-router"
+import { Link, useLocation } from "react-router"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,6 +8,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb"
+
+const capitalize = (str: string) => {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
+}
 
 export default function BreadcrumbNav() {
   const location = useLocation()
@@ -22,16 +29,19 @@ export default function BreadcrumbNav() {
           const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`
           const isLast = index === pathnames.length - 1
           const isFirst = index === 0
+          const displayText = capitalize(name.replace(/-/g, " "))
 
           return (
             <React.Fragment key={routeTo}>
               {!isFirst && <BreadcrumbSeparator />}
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage className="capitalized">{name.replace(/-/g, " ")}</BreadcrumbPage>
+                  <BreadcrumbPage>{displayText}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={routeTo} className="capitalize hover:text-foreground">
-                    {name.replace(/-/g, " ")}
+                  <BreadcrumbLink asChild>
+                    <Link to={routeTo} className="hover:text-foreground">
+                      {displayText}
+                    </Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>

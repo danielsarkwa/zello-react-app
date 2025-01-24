@@ -1,4 +1,4 @@
-import { Link, MoreHorizontal, UserPlus, Trash2, Frame } from "lucide-react"
+import { Link as LinkIcon, MoreHorizontal, UserPlus, Trash2, Frame } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -17,70 +17,73 @@ import {
   useSidebar
 } from "@/components/ui/sidebar"
 
+import { useWorkspaceStore } from "@/store/workspace"
+import { getWorkspaceProjects } from "@/feature/project-management"
+import { Link, useLocation } from "react-router"
+
 export function NavProjects() {
   const { isMobile } = useSidebar()
+  const { currentWorkspace } = useWorkspaceStore()
+  const location = useLocation()
 
-  const projects = [
-    {
-      // add project id
-      name: "Design Engineering",
-      url: "/projects/123e4567-e89b-12d3-a456-426614174000"
-    },
-    {
-      // add project id
-      name: "Sales & Marketing",
-      url: "/projects/987fcdeb-51a2-43d8-b789-012345678901"
-    },
-    {
-      // add project id
-      name: "Travel",
-      url: "/projects/550e8400-e29b-41d4-a716-446655440000"
-    }
-  ]
+  const { isPending, projects = [] } = getWorkspaceProjects(currentWorkspace?.id ?? "")
 
-  // isActive: location.pathname === project.url
+  if (!projects.length || isPending) {
+    return null
+  }
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <Frame />
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+        {projects.map((project) => {
+          const isActive = location.pathname === `/projects/${project.id}`
+
+          return (
+            <SidebarMenuItem key={project.name}>
+              <SidebarMenuButton
+                asChild
+                tooltip={project.name}
+                className={`${
+                  isActive &&
+                  "bg-gray-300/25 dark:bg-gray-800 hover:bg-gray-300/35 dark:hover:bg-gray-800/85"
+                }`}
               >
-                <DropdownMenuItem>
-                  <UserPlus className="text-muted-foreground" />
-                  <span>Invite member</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link className="text-muted-foreground" />
-                  <span>Copy Link</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        ))}
+                <Link to={`/projects/${project.id}`}>
+                  <Frame className={`${isActive && "text-primary"}`} />
+                  <span className={`${isActive && "text-primary"}`}>{project.name}</span>
+                </Link>
+              </SidebarMenuButton>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuAction showOnHover>
+                    <MoreHorizontal />
+                    <span className="sr-only">More</span>
+                  </SidebarMenuAction>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-48"
+                  side={isMobile ? "bottom" : "right"}
+                  align={isMobile ? "end" : "start"}
+                >
+                  <DropdownMenuItem>
+                    <UserPlus className="text-muted-foreground" />
+                    <span>Invite member</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <LinkIcon className="text-muted-foreground" />
+                    <span>Copy Link</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Trash2 className="text-muted-foreground" />
+                    <span>Delete Project</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          )
+        })}
       </SidebarMenu>
     </SidebarGroup>
   )

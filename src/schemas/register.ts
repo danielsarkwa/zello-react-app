@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { AccessLevel, AccessLevelEnum } from "@/types/access-level"
+import { AccessLevelString, AccessLevelStringEnum } from "@/types/access-level"
 
 export const registerSchema = z.object({
   name: z.string().min(1, "Name is required").max(30),
@@ -30,7 +30,7 @@ export const registerSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(100, "Password must not exceed 100 characters"),
-  accessLevel: AccessLevel.default(AccessLevelEnum.Member)
+  accessLevel: AccessLevelString.default(AccessLevelStringEnum.Member)
 })
 
 export type RegisterFormValues = z.infer<typeof registerSchema>

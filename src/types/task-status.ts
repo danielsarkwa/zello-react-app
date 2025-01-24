@@ -1,9 +1,9 @@
 import { z } from "zod"
 
 export enum TaskStatusEnum {
-  NotStarted = "NotStarted",
-  InProgress = "InProgress",
-  Completed = "Completed"
+  NotStarted = 0,
+  InProgress = 1,
+  Completed = 2
 }
 
 export const TaskStatus = z.nativeEnum(TaskStatusEnum)

@@ -1,4 +1,4 @@
-import { WorkspaceCard } from "@/components/ui/workspace-card"
+import { CardContainer } from "@/components/ui/card-container"
 
 import EmptyState from "@/components/empty-state"
 import WorkspaceListItem from "@/components/workspace-list-item"
@@ -18,7 +18,7 @@ export default function WorkspaceListPage() {
   }
 
   return (
-    <WorkspaceCard>
+    <CardContainer>
       {workspaces.length === 0 ? (
         <EmptyState
           title="You have no workspaces yet"
@@ -29,6 +29,6 @@ export default function WorkspaceListPage() {
           <WorkspaceListItem key={workspace.id} workspace={workspace} />
         ))
       )}
-    </WorkspaceCard>
+    </CardContainer>
   )
 }

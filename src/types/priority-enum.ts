@@ -1,10 +1,10 @@
 import { z } from "zod"
 
 export enum PriorityEnum {
-  Low = "Low",
-  Medium = "Medium",
-  High = "High",
-  Urgent = "Urgent"
+  Low = 0,
+  Medium = 1,
+  High = 2,
+  Urgent = 3
 }
 
 export const Priority = z.nativeEnum(PriorityEnum)

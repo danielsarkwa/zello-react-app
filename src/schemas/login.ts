@@ -1,5 +1,5 @@
-import { AccessLevel } from "@/types/access-level"
 import { z } from "zod"
+import { AccessLevelNumeric, AccessLevelString } from "@/types/access-level"
 
 export const loginSchema = z.object({
   username: z
@@ -13,8 +13,8 @@ export const loginResponseSchema = z.object({
   token: z.string(),
   expires: z.string().datetime(),
   tokenType: z.literal("Bearer"),
-  accessLevel: AccessLevel,
-  numericLevel: z.number(),
+  accessLevel: AccessLevelString,
+  numericLevel: AccessLevelNumeric,
   description: z.string()
 })
 

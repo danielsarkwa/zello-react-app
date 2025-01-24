@@ -1,10 +1,10 @@
 import { ChevronRight, Hash } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
-import { WorkspaceCard } from "@/components/ui/workspace-card"
+import { CardContainer } from "@/components/ui/card-container"
 
 export default function WorkspaceListSkeleton() {
   return (
-    <WorkspaceCard>
+    <CardContainer>
       {[1, 2, 3].map((i) => (
         <div
           key={i}
@@ -17,6 +17,6 @@ export default function WorkspaceListSkeleton() {
           <ChevronRight className="opacity-25" />
         </div>
       ))}
-    </WorkspaceCard>
+    </CardContainer>
   )
 }

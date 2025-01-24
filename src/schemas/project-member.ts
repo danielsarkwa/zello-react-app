@@ -1,12 +1,12 @@
 import { z } from "zod"
-import { AccessLevel } from "@/types/access-level"
+import { AccessLevelString } from "@/types/access-level"
 import { workspaceMemberSchema } from "@/schemas/workspace-member"
 
 export const projectMemberSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
   workspaceMemberId: z.string().uuid(),
-  accessLevel: AccessLevel,
+  accessLevel: AccessLevelString,
   createdDate: z.string().datetime()
 })
 
