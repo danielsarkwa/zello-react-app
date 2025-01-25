@@ -9,7 +9,6 @@ export const useErrorHandler = () => {
   const handleError = (
     error: StandardError,
     customMessages?: {
-      // this may not be neccessary
       validation?: string
       [key: number]: string // For specific HTTP status codes
     }
@@ -20,7 +19,7 @@ export const useErrorHandler = () => {
         .join("\n")
 
       toast({
-        title: customMessages?.validation || "Ooops! Zod has a validation error",
+        title: customMessages?.validation || "🫣 Ooops! Zod has a validation error",
         description: errorMessages,
         variant: "destructive"
       })
@@ -29,7 +28,7 @@ export const useErrorHandler = () => {
 
     if (error.type === ErrorType.APIValidationError) {
       toast({
-        title: customMessages?.validation || "Ooops! Your request was invalid",
+        title: customMessages?.validation || "🫣 Ooops! Your request was invalid",
         description: error.message,
         variant: "destructive"
       })
@@ -38,7 +37,7 @@ export const useErrorHandler = () => {
 
     if (error.type === ErrorType.APIError) {
       toast({
-        title: `Uh oh! Something went wrong :: ${error.status}`,
+        title: `🫣 Ooops! There's an error from our server :: ${error.status}`,
         description: error.message,
         variant: "destructive"
       })
@@ -47,7 +46,7 @@ export const useErrorHandler = () => {
 
     if (error.type === ErrorType.UnauthorizedError) {
       toast({
-        title: "Uh oh! Your session expired",
+        title: "🫣 Uh oh! Your session expired",
         description: error.message,
         variant: "destructive",
         duration: 9000
@@ -58,7 +57,7 @@ export const useErrorHandler = () => {
 
     if (error.type === ErrorType.AuthenticationError) {
       toast({
-        title: "Error logging in",
+        title: "🤔 Uh oh!, There's an error logging in",
         description: error.message,
         variant: "destructive",
         duration: 7000
@@ -68,7 +67,7 @@ export const useErrorHandler = () => {
 
     if (error.type === ErrorType.NetworkError) {
       toast({
-        title: "Network Error",
+        title: "🛜 Oops! Network Error",
         description: error.message,
         variant: "destructive",
         duration: 5000
@@ -79,16 +78,16 @@ export const useErrorHandler = () => {
     // Check for specific status code messages
     if (error.status && customMessages?.[error.status]) {
       toast({
-        title: "Error Message",
+        title: "🫣 Uh oh! Something went wrong",
         description: customMessages[error.status],
         variant: "destructive"
       })
       return
     }
 
-    // Default error message
+    // Default Error message
     toast({
-      title: "Error Message",
+      title: "😥 Oops! Something went wrong",
       description: error.message || "An unexpected error occurred.",
       variant: "destructive"
     })

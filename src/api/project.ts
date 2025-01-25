@@ -64,8 +64,8 @@ const createProject = async (data: CreateProjectValues): Promise<ProjectWithDeta
     members: response.data.members
       ? response.data.members?.map((member: any) => ({
           ...member,
-          workspaceId: member.workspace_id || response.data.workspace_id, // Fallback to project workspace
-          userId: member.user_id || member.id, // Fallback to member id if user_id not present
+          workspaceId: member.workspace_id || '',
+          userId: member.user_id || '',
           accessLevel: member.access_level,
           createdDate: member.created_date
         }))

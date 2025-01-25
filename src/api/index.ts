@@ -40,7 +40,7 @@ const handleAxiosError = (error: AxiosError): StandardError => {
   if (!error.response) {
     return {
       status: 0,
-      message: "Please check your internet connection.",
+      message: "Please check your internet connection or our server may be down.",
       type: ErrorType.NetworkError
     }
   }
@@ -109,7 +109,7 @@ api.interceptors.request.use(async (config) => {
   if (isPublicRoute) return config
 
   if (isTokenExpired()) {
-    // an improvement would be get a new token using the refresh token
+    // @IMPROVEMENT: It will be get a new token using a refresh token without needing to log in again
     useAuthStore.getState().clearAuth()
     NavigationService.navigateToLogin()
     return Promise.reject(new Error("Your token expired, try logging in again."))
