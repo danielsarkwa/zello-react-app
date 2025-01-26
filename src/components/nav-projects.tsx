@@ -50,7 +50,7 @@ export function NavProjects() {
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
-        <motion.div variants={container} initial="hidden" animate="show">
+        <motion.div variants={container} initial="hidden" animate="show" className="space-y-1">
           {projects.map((project) => {
             const isActive = location.pathname === `/projects/${project.id}`
 

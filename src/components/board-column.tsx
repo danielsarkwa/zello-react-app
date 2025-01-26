@@ -6,8 +6,8 @@ import { TaskCard } from "@/components/task-card"
 import { cva } from "class-variance-authority"
 import { Card, CardContent, CardHeader } from "./ui/card"
 import { Button } from "./ui/button"
-import { GripVertical } from "lucide-react"
-import { ScrollArea, ScrollBar } from "./ui/scroll-area"
+import { Ellipsis, GripVertical, Plus } from "lucide-react"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 import { Task } from "@/schemas/tasks"
 
@@ -68,21 +68,32 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
     <Card
       ref={setNodeRef}
       style={style}
-      className={variants({
+      className={`border-none shadow-none ${variants({
         dragging: isOverlay ? "overlay" : isDragging ? "over" : undefined
-      })}
+      })}`}
     >
-      <CardHeader className="p-4 font-semibold border-b-2 text-left flex flex-row space-between items-center">
-        <Button
-          variant={"ghost"}
-          {...attributes}
-          {...listeners}
-          className=" p-1 text-primary/50 -ml-2 h-auto cursor-grab relative"
-        >
-          <span className="sr-only">{`Move column: ${column.name}`}</span>
-          <GripVertical />
-        </Button>
-        <span className="ml-auto"> {column.name}</span>
+      <CardHeader className="p-4 font-semibold border-b-[1px] flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center gap-2">
+          <Button
+            variant={"ghost"}
+            {...attributes}
+            {...listeners}
+            className=" p-1 text-primary/50 -ml-2 h-auto cursor-grab relative"
+            title="Reorder List"
+          >
+            <span className="sr-only">{`Move column: ${column.name}`}</span>
+            <GripVertical />
+          </Button>
+          <span>{column.name}</span>
+        </div>
+        <div className="flex flex-row items-center gap-1">
+            <Button variant="ghost" className="h-8 w-8" title="Add Task">
+            <Plus />
+            </Button>
+          <Button variant="ghost" className="h-8 w-8">
+            <Ellipsis />
+          </Button>
+        </div>
       </CardHeader>
       <ScrollArea>
         <CardContent className="flex flex-grow flex-col gap-2 p-2">
