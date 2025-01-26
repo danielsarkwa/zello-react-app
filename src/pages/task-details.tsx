@@ -1,65 +1,75 @@
-import { useState } from 'react'
+import { useState } from "react"
 import { Link, useParams } from "react-router"
-import { 
-  Loader2, Plus, Calendar, CheckCircle2, 
-  Flag, MessageSquare, Clock 
+import {
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Columns3,
+  Flag,
+  Loader2,
+  MessageSquare,
+  Plus
 } from "lucide-react"
-import { format } from 'date-fns'
 
 import Header from "@/components/header"
 import CreateTaskDialog from "@/components/dialogs/create-task-dialog"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbPage,
   BreadcrumbList,
   BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb"
 
-const priorityColors = {
-  Low: "bg-blue-100 text-blue-800",
-  Medium: "bg-yellow-100 text-yellow-800",
-  High: "bg-red-100 text-red-800",
-  Urgent: "bg-purple-100 text-purple-800"
-}
-
-const statusColors = {
-  NotStarted: "bg-gray-100 text-gray-800",
-  InProgress: "bg-blue-100 text-blue-800",
-  Completed: "bg-green-100 text-green-800"
-}
+import { getTaskDetails } from "@/feature/task-management"
+import { CardContainer } from "@/components/ui/card-container"
+import EmptyState from "@/components/empty-state"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { format } from "date-fns"
+import { TASK_STATUS_OPTIONS } from "@/types/task-status"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Input } from "@/components/ui/input"
 
 export default function TaskDetailsPage() {
-  const [newComment, setNewComment] = useState('')
-  const { isPending, task } = getTaskDetails("123") // Replace with actual task ID
+  const params = useParams()
+  const taskId = params.taskId as string
+  const [newComment, setNewComment] = useState("")
+  const { isPending, task, error } = getTaskDetails(taskId)
 
-  const breadcrumb = () => (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/projects">Projects</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Task Details</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
-  )
+  if (error) {
+    console.log(error)
+  }
+
+  const breadcrumb = () => {
+    return (
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/projects" className="hover:text-foreground">
+                Projects
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to={`/projects/${params.projectId}`} className="hover:text-foreground">
+                {params.projectId}
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Task Details</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    )
+  }
 
   if (isPending) {
     return (
@@ -69,10 +79,24 @@ export default function TaskDetailsPage() {
     )
   }
 
+  if (!task) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <CardContainer>
+          <EmptyState
+            icon={<Columns3 />}
+            title="Task not found"
+            description="The task you are looking for does not exist."
+          />
+        </CardContainer>
+      </div>
+    )
+  }
+
   return (
     <div className="flex h-screen flex-col">
       <Header breadcrumb={breadcrumb()} />
-      
+
       <div className="flex-1 overflow-hidden">
         <div className="h-full flex flex-col">
           {/* Task Details Section */}
@@ -81,9 +105,7 @@ export default function TaskDetailsPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <CardTitle className="text-2xl">{task?.name}</CardTitle>
-                  <CardDescription className="mt-2">
-                    {task?.description}
-                  </CardDescription>
+                  <CardDescription className="mt-2">{task?.description}</CardDescription>
                 </div>
                 <Button variant="outline">Edit</Button>
               </div>
@@ -92,26 +114,27 @@ export default function TaskDetailsPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-                  <Badge variant="outline" className={statusColors[task?.status]}>
-                    {task?.status}
-                  </Badge>
+                  <Badge variant="outline">{task?.status}</Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <Flag className="h-4 w-4 text-muted-foreground" />
-                  <Badge variant="outline" className={priorityColors[task?.priority]}>
-                    {task?.priority}
+                  <Badge variant="outline">
+                    {TASK_STATUS_OPTIONS.find((option) => option.value === task?.status)?.label ||
+                      "Status not set"}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">
-                    {task?.deadline ? format(new Date(task.deadline), 'MMM dd, yyyy') : 'No deadline'}
+                    {task?.deadline
+                      ? format(new Date(task.deadline), "MMM dd, yyyy")
+                      : "No deadline"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">
-                    Created {format(new Date(task?.createdDate), 'MMM dd, yyyy')}
+                    Created {format(new Date(task.createdDate), "MMM dd, yyyy")}
                   </span>
                 </div>
               </div>
@@ -126,12 +149,11 @@ export default function TaskDetailsPage() {
                   <CardHeader className="pb-2">
                     <div className="flex items-center gap-2">
                       <Avatar className="h-6 w-6">
-                        <AvatarImage src={comment.user.avatar} />
-                        <AvatarFallback>{comment.user.name[0]}</AvatarFallback>
+                        <AvatarFallback>AB</AvatarFallback>
                       </Avatar>
-                      <span className="font-medium">{comment.user.name}</span>
+                      <span className="font-medium">[username]</span>
                       <span className="text-sm text-muted-foreground">
-                        {format(new Date(comment.createdDate), 'MMM dd, yyyy')}
+                        {format(new Date(comment.createdDate), "MMM dd, yyyy")}
                       </span>
                     </div>
                   </CardHeader>
