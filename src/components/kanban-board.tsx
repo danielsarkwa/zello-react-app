@@ -37,8 +37,6 @@ export function KanbanBoard({ lists }: KanbanBoardProps) {
   const pickedUpTaskColumn = useRef<ColumnId | null>(null)
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
 
-  console.log(lists)
-
   const [tasks, setTasks] = useState<Task[]>([])
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null)

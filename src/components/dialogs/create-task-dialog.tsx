@@ -37,10 +37,12 @@ import { TASK_STATUS_OPTIONS } from "@/types/task-status"
 
 export default function CreateTaskDialog({
   listId,
-  projectId
+  projectId,
+  customButton
 }: {
   listId: string
   projectId: string
+  customButton?: React.ReactNode
 }) {
   const [open, setOpen] = useState(false)
   const { mutate, isPending } = createTask(listId, projectId)
@@ -64,9 +66,11 @@ export default function CreateTaskDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8" title="Add Task">
-          <Plus />
-        </Button>
+        {customButton || (
+          <Button variant="ghost" className="h-8 w-8" title="Add Task">
+            <Plus />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -66,8 +66,12 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/projects">
           <Route index element={<ProjectsPage />} />
-          <Route path=":projectId" element={<ProjectDetailsPage />} />
-          <Route path=":projectId/tasks/:taskId" element={<TaskDetailsPage />} />
+          <Route path=":projectId">
+            <Route index element={<ProjectDetailsPage />} />
+            <Route path=":listId">
+              <Route path=":taskId" element={<TaskDetailsPage />} />
+            </Route>
+          </Route>
         </Route>
         <Route path="/members" element={<MembersPage />} />
         <Route path="/account" element={<AccountPage />} />

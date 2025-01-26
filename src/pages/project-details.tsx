@@ -1,13 +1,24 @@
-import { useParams } from "react-router"
+import { Link, useParams } from "react-router"
+import { AlertCircle, Columns3 } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
+
 import Header from "@/components/header"
 import { KanbanBoard } from "@/components/kanban-board"
 import { CardContainer } from "@/components/ui/card-container"
 import EmptyState from "@/components/empty-state"
 import CreateListDialog from "@/components/dialogs/create-list-dialog"
 import KanbanBoardSkeleton from "@/components/kanban-board-skeleton"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from "@/components/ui/breadcrumb"
+import ProjectDetailsDrawer from "@/components/Project-details-drawer"
+
 import { getProjectDetails } from "@/feature/project-management"
-import { AlertCircle, Columns3 } from "lucide-react"
 
 export default function ProjectDetailsPage() {
   const params = useParams()
@@ -18,9 +29,32 @@ export default function ProjectDetailsPage() {
     console.error(error)
   }
 
+  const breadcrumb = () => {
+    return (
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/projects" className="hover:text-foreground">
+                Projects
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{project?.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    )
+  }
+
   return (
     <>
-      <Header />
+      <Header
+        breadcrumb={breadcrumb()}
+        actions={project ? <ProjectDetailsDrawer project={project} /> : null}
+      />
       <motion.main
         className="p-5 flex-1"
         initial={{ opacity: 0 }}

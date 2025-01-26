@@ -10,8 +10,9 @@ import { Button } from "./ui/button"
 import { Ellipsis, GripVertical } from "lucide-react"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Task } from "@/schemas/tasks"
-import CreateTaskDialog from "./dialogs/create-task-dialog"
+import CreateTaskDialog from "@/components/dialogs/create-task-dialog"
 import React from "react"
+import { Link } from "react-router"
 
 export interface Column {
   id: UniqueIdentifier
@@ -128,7 +129,9 @@ export function BoardColumn({ column, tasks, isOverlay, columnIndex }: BoardColu
               >
                 {tasks.map((task) => (
                   <motion.div key={task.id} variants={itemVariants}>
-                    <TaskCard task={task} />
+                    <Link to={`/projects/${column.projectId}/${column.id}/${task.id}`}>
+                      <TaskCard task={task} />
+                    </Link>
                   </motion.div>
                 ))}
               </motion.div>
