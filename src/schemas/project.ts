@@ -14,8 +14,8 @@ export const projectSchema = z.object({
 })
 
 export const ProjectWithDetailsSchema = projectSchema.extend({
-  lists: z.lazy(() => z.array(taskListSchema)).optional(),
-  members: z.lazy(() => z.array(workspaceMemberSchema)).optional()
+  lists: z.lazy(() => z.array(taskListSchema)),
+  members: z.lazy(() => z.array(projectMemberSchema))
 })
 
 export const ProjectResponseSchema = z.array(ProjectWithDetailsSchema).default([])
@@ -34,7 +34,7 @@ export const createProjectFormSchema = createProjectSchema.pick({
 })
 
 import { taskListSchema } from "@/schemas/task-list"
-import { workspaceMemberSchema } from "@/schemas/workspace-member"
+import { projectMemberSchema } from "@/schemas/project-member"
 
 export type Project = z.infer<typeof projectSchema>
 export type ProjectWithDetails = z.infer<typeof ProjectWithDetailsSchema>

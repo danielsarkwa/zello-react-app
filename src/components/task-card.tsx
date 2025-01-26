@@ -8,11 +8,13 @@ import { GripVertical } from "lucide-react"
 import { Badge } from "./ui/badge"
 import { ColumnId } from "@/components/kanban-board"
 
-export interface Task {
-  id: UniqueIdentifier
-  columnId: ColumnId
-  content: string
-}
+import { Task } from "@/schemas/tasks"
+
+// export interface Task {
+//   id: UniqueIdentifier
+//   columnId: ColumnId
+//   content: string
+// }
 
 interface TaskCardProps {
   task: Task
@@ -75,7 +77,7 @@ export function TaskCard({ task, isOverlay }: TaskCardProps) {
         </Badge>
       </CardHeader>
       <CardContent className="px-3 pt-3 pb-6 text-left whitespace-pre-wrap">
-        {task.content}
+        {task.name}
       </CardContent>
     </Card>
   )

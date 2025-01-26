@@ -23,7 +23,7 @@ export default function EmptyState({
 
       <div>
         <h2 className="text-xl font-semibold">{title}</h2>
-        <p className="leading-7 text-base max-w-[600px] text-muted-foreground">{description}</p>
+        <p className="text-base max-w-[600px] text-muted-foreground">{description}</p>
         {button && <div className="mt-4">{button}</div>}
       </div>
     </div>

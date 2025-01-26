@@ -52,7 +52,9 @@ const handleAxiosError = (error: AxiosError): StandardError => {
     const formattedErrors: Record<string, string[]> = {}
 
     const descriptionMessages = data.errors.Description || []
-    const message = Array.isArray(descriptionMessages) ? descriptionMessages.join(", ") : descriptionMessages
+    const message = Array.isArray(descriptionMessages)
+      ? descriptionMessages.join(", ")
+      : descriptionMessages
 
     return {
       status: error.response.status,
@@ -112,7 +114,14 @@ api.interceptors.request.use(async (config) => {
     // @IMPROVEMENT: It will be get a new token using a refresh token without needing to log in again
     useAuthStore.getState().clearAuth()
     NavigationService.navigateToLogin()
-    return Promise.reject(new Error("Your token expired, try logging in again."))
+    return Promise.reject({
+      status: 401,
+      message: "Your token expired, try logging in again.",
+      type: ErrorType.AuthenticationError,
+      errors: {
+        token: ["Token expired"]
+      }
+    } satisfies StandardError)
   }
 
   const { token } = useAuthStore.getState()

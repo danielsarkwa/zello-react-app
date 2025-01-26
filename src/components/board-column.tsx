@@ -2,16 +2,19 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable"
 import { useDndContext, type UniqueIdentifier } from "@dnd-kit/core"
 import { CSS } from "@dnd-kit/utilities"
 import { useMemo } from "react"
-import { Task, TaskCard } from "@/components/task-card"
+import { TaskCard } from "@/components/task-card"
 import { cva } from "class-variance-authority"
 import { Card, CardContent, CardHeader } from "./ui/card"
 import { Button } from "./ui/button"
 import { GripVertical } from "lucide-react"
 import { ScrollArea, ScrollBar } from "./ui/scroll-area"
 
+import { Task } from "@/schemas/tasks"
+
 export interface Column {
   id: UniqueIdentifier
-  title: string
+  name: string
+  position: number
 }
 
 export type ColumnType = "Column"
@@ -39,7 +42,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
       column
     } satisfies ColumnDragData,
     attributes: {
-      roleDescription: `Column: ${column.title}`
+      roleDescription: `Column: ${column.name}`
     }
   })
 
@@ -49,7 +52,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   }
 
   const variants = cva(
-    "h-[750px] max-h-[750px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
+    "h-[660px] max-h-[660px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
     {
       variants: {
         dragging: {
@@ -76,10 +79,10 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
           {...listeners}
           className=" p-1 text-primary/50 -ml-2 h-auto cursor-grab relative"
         >
-          <span className="sr-only">{`Move column: ${column.title}`}</span>
+          <span className="sr-only">{`Move column: ${column.name}`}</span>
           <GripVertical />
         </Button>
-        <span className="ml-auto"> {column.title}</span>
+        <span className="ml-auto"> {column.name}</span>
       </CardHeader>
       <ScrollArea>
         <CardContent className="flex flex-grow flex-col gap-2 p-2">
@@ -112,7 +115,7 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
         dragging: dndContext.active ? "active" : "default"
       })}
     >
-      <div className="flex gap-4 items-center flex-row justify-center">{children}</div>
+      <div className="flex gap-4 items-start flex-row justify-center">{children}</div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   )

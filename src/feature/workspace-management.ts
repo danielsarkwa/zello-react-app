@@ -14,7 +14,7 @@ export function workspaceQueryKey(id?: string) {
 }
 
 export function getAllWorkspaces() {
-  const { isPending, data, error } = useQuery<WorkspaceWithDetails[]>({
+  const { isPending, data, error } = useQuery<WorkspaceWithDetails[], StandardError>({
     queryKey: workspaceQueryKey(),
     queryFn: () => WorkspaceService.getWorkspaces()
   })

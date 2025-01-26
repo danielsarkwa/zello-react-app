@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { motion } from "framer-motion"
 import {
   Card,
   CardContent,
@@ -18,11 +19,8 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Grid2x2Plus, Loader2 } from "lucide-react"
-
 import logo from "@/assets/images/logo-zello.png"
-
 import { Link, useNavigate } from "react-router"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { createWorkspaceSchema, CreateWorkspaceValues } from "@/schemas/workspace"
@@ -53,20 +51,34 @@ export default function CreateWorkspacePage() {
         className:
           "bg-green-500 text-white border-green-500 dark:bg-green-700 dark:text-white dark:border-green-700"
       })
-
       navigate("/load-workspaces")
     }
   }, [isSuccess])
 
   return (
-    <div className="w-full h-full flex justify-center items-center p-6">
-      <div className="absolute top-6 left-6">
+    <motion.div
+      className="w-full h-full flex justify-center items-center p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <motion.div
+        className="absolute top-6 left-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.2 }}
+      >
         <Link to="/" className="flex items-center gap-2 font-medium">
           <img src={logo} alt="Zello Logo" className="w-11 h-11" />
           Zello App
         </Link>
-      </div>
-      <div className="flex flex-col justify-center items-center gap-6">
+      </motion.div>
+      <motion.div
+        className="flex flex-col justify-center items-center gap-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+      >
         <Card className="max-w-xl">
           <CardHeader>
             <CardTitle>Create a new workspace</CardTitle>
@@ -105,7 +117,7 @@ export default function CreateWorkspacePage() {
             </form>
           </Form>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
