@@ -1,110 +1,178 @@
-# Frontend Project
+# Zello Frontend
 
-Zello frontend application is the user interface for my team work backend application built using C#, ASP.NET and PostgreSQL. The frontend application is developed using React, TypeScript, Tailwind, Shadcn, tanstack/react-query.
+Zello is a modern project management system inspired by tools like Trello and Jira. The frontend application provides an intuitive interface for managing projects, tasks, and team collaboration, built with React, TypeScript, and modern web technologies.
 
-## Requirements / Features
+## Tech Stack
 
-## Frontend Goals
+- **Framework**: React with TypeScript
+- **State Management**: 
+  - TanStack Query for server state
+  - Zustand for client state
+- **Styling**: Tailwind CSS with Shadcn UI components
+- **Form Handling**: React Hook Form with Zod validation
+- **API Integration**: Axios with TypeScript
+- **Authentication**: JWT-based auth with refresh token mechanism
+- **Backend API**: C#, PostgreSQL, EF Core, ASP.NET
 
-1. Implement enterprise integration with backend API 🌟
-2. Focus on code quality, clean implementation and best practices 🌟
-3. Implement proper state management on the front-end
-4. Implement good and efficient UI/UX
+## Features
 
-## Frontend Architecture Overview
+### Core Functionality
+- User authentication (login/register)
+- Workspace management
+- Project creation and management
+- Task tracking with Kanban boards
+- Team collaboration with comments
+- User feedback and system awareness
+
+### Technical Features
+- Type-safe API integration with Zod schemas
+- Error boundary implementation
+- Form validation with schema enforcement
+- Responsive design for all devices (⏰in-progress)
+- Loading states and skeleton screens
+- Centralized error handling
+- API error standardization through interceptors
+
+## Architecture
+
+### Data Flow
 
 ```mermaid
 sequenceDiagram
-participant UI as 🖥️ React UI
-    participant Hook as 🪝 Custom Hooks
-    participant Store as 🏪 Zustand Store
-    participant Query as 🔄 TanStack Query
-    participant Schema as ✅ Zod Schema
-    participant Interceptor as 🔀 Axios Interceptors
-    participant API as 🚀 Backend API
+    participant C as 🖥️ UI Component
+    participant F as 🪝 Feature Hook
+    participant Q as 🔄 Query Client
+    participant S as 🛍️ Service Layer
+    participant A as 🔀 API Layer
+    participant B as 🚀 Backend
 
-    Note over UI,API: Authentication Flow
-    UI->>Store: Dispatch Login Action
-    Store->>Schema: Validate Credentials
-    Schema-->>Store: Validation Result
-    Store->>Interceptor: Set Auth Headers
-    Interceptor->>API: Login Request
-    API-->>Store: JWT Token
-    Store-->>UI: Update Auth State
+    Note over C,B: Data Fetching Flow
+    C->>F: Call Feature Hook
+    F->>Q: Execute Query
+    Q->>S: Call Service
+    S->>A: Make Request
+    A->>B: HTTP Request
+    B-->>A: Response
+    A->>S: Transform Data
+    S->>Q: Return Typed Data
+    Q-->>F: Cache & Return
+    F-->>C: Render Data
 
-    Note over UI,API: Data Flow
-    UI->>Hook: Call Custom Hook
-    Hook->>Query: Fetch Data
-    Query->>Interceptor: HTTP Request
-    Interceptor->>Interceptor: Add Auth Headers
-    Interceptor->>API: Make API Call
-    API-->>Interceptor: Response
-    Interceptor->>Interceptor: Handle Response/Error
-    Interceptor-->>Query: Processed Response
-    Query->>Schema: Validate Response
-    Schema-->>Query: Validated Data
-    Query-->>Hook: Cached Data
-    Hook-->>UI: Render Data
-
-    Note over UI,API: Error Handling
-    Interceptor->>Store: Global Error State
-    Store-->>UI: Show Error Toast
-
-    Note over UI,API: State Updates
-    UI->>Store: Update Global State
-    Store-->>Query: Invalidate Queries
-    Query->>API: Refetch if needed
+    Note over C,B: Data Mutation Flow
+    C->>F: Trigger Mutation
+    F->>Q: Execute Mutation
+    Q->>S: Call Service
+    S->>A: Make Request
+    A->>B: HTTP Request
+    B-->>A: Response
+    A->>S: Transform Data
+    S->>Q: Return & Invalidate
+    Q-->>F: Update Cache
+    F-->>C: Update UI
 ```
 
-## API Integration Data Flow
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant C as Component/Page
-    participant Z as Zod Schema
-    participant Q as Tanstack Query
-    participant A as Entity API
-    participant I as API Interceptor
-    participant S as Entity Schema
-    participant B as Backend API
+### Directory Structure
 
-    U->>+C: Interact with UI
-    
-    alt Form Submission
-        C->>+Z: Validate Form Data
-        Z-->>-C: Return Validated Data
-    end
-
-    C->>+Q: Call useQuery/useMutation
-    
-    Q->>+A: Execute API Function
-    
-    A->>+I: Make Request
-    
-    I->>+I: Add Access Token
-    
-    I->>+B: Forward Request
-    
-    B-->>-I: Return Response
-    
-    alt API Error (401, 500)
-        I-->>A: Handle API Error
-        A-->>Q: Return Error
-        Q-->>C: Surface Error to UI
-    else Success
-        I-->>-A: Return Response
-        
-        A->>+S: Validate Response
-        alt Schema Validation Error
-            S-->>A: Schema Error
-            A-->>Q: Return Type Error
-            Q-->>C: Surface Error to UI
-        else Success
-            S-->>-A: Return Typed Data
-            A-->>-Q: Cache & Return Data
-            Q-->>-C: Update UI
-        end
-    end
-    
-    C-->>-U: Show Result/Error
 ```
+src/
+├── api/           # API service layer
+├── components/    # Reusable UI components
+├── features/      # Feature-specific logic
+├── hooks/         # Custom React hooks
+├── lib/           # Utility functions
+├── pages/         # Route components
+├── schemas/       # Zod validation schemas
+├── store/         # Zustand state management
+└── types/         # TypeScript type definitions
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js v18 or higher
+- npm or yarn
+- Git
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone [repository-url]
+cd zello-frontend
+```
+
+2. Install dependencies:
+```bash
+yarn install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+
+4. Start development server:
+```bash
+yarn dev
+```
+
+### Environment Variables
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+## Development Guidelines
+
+### Code Style
+- Use Zod schema for all data coming from backend 
+- Follow ESLint and Prettier configurations
+- Keep components small and focused
+- Use type-based folder structure
+
+### State Management
+- Use TanStack Query for server state
+- Use Zustand for global client state
+- Use React state for local component state
+
+### Testing
+- Write unit tests for critical functionality
+- Test custom hooks and utilities
+- Ensure type safety with TypeScript
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run lint` - Run ESLint
+- Write unit tests for critical functionality
+- Test custom hooks and utilities
+- Ensure type safety with TypeScript
+
+## Future Improvements
+
+## Technical Improvements
+- Implement optimistic updates for better UX in mutations
+- Add comprehensive unit testing with Vitest
+- Implement drag and drop syncing with API for Kanban board Tasks
+- Add end-to-end testing with Cypress
+- Improve responsive design for mobile devices
+
+## Feature Improvements
+- Improve workspace dashboard and show more anlytics
+- Develop comment creating and management
+- Implement additional CRUD operations to the entities (Workspaces, Project, List, Tasks and Comments) for user to delete and edit
+- Add data filtering for task page
+
+## Performance Improvements
+- Implement code splitting for better load times
+- Optimize bundle size
+
+## Resources
+
+- [React Documentation](https://react.dev)
+- [React Router](https://reactrouter.com/)
+- [TanStack Query](https://tanstack.com/query)
+- [Shadcn UI](https://ui.shadcn.com)
+- [Tailwind CSS](https://tailwindcss.com)
+- [DnD Kit](https://dndkit.com/)
