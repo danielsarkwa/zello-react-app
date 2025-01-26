@@ -71,6 +71,9 @@ sequenceDiagram
     F-->>C: Update UI
 ```
 
+<img width="922" alt="Screenshot 2025-01-27 at 1 37 29 AM" src="https://github.com/user-attachments/assets/dcaf675a-50ee-4658-b568-2d762d01de07" />
+
+
 ### Directory Structure
 
 ```
