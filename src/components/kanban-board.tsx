@@ -157,7 +157,7 @@ export function KanbanBoard({ lists }: KanbanBoardProps) {
     >
       <BoardContainer>
         <SortableContext items={columns.map((col) => col.id)}>
-          {columns.map((col) => (
+          {columns.map((col, index) => (
             <BoardColumn
               key={col.id}
               column={{
@@ -166,6 +166,7 @@ export function KanbanBoard({ lists }: KanbanBoardProps) {
                 position: col.position,
                 projectId: col.projectId
               }}
+              columnIndex={index}
               tasks={col.tasks || []}
             />
           ))}
@@ -181,6 +182,7 @@ export function KanbanBoard({ lists }: KanbanBoardProps) {
               column={activeColumn}
               tasks={columns.find((col) => col.id === activeColumn.id)?.tasks || []}
               isOverlay
+              columnIndex={0}
             />
           )}
           {activeTask && <TaskCard task={activeTask} isOverlay />}
