@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ProjectWithDetails } from "@/schemas/project"
 import { format } from "date-fns"
-import { Calendar, NotebookTabs, Goal, Ellipsis } from "lucide-react"
+import { Calendar, NotebookTabs, Goal, Ellipsis, Clock } from "lucide-react"
 import { Badge } from "./ui/badge"
 import { Separator } from "@radix-ui/react-separator"
 import { PROJECT_STATUS_OPTIONS } from "@/types/project-status"
@@ -82,7 +82,7 @@ export default function ProjectDetailsDrawer({ project }: ProjectDetailsDrawerPr
                   variant="secondary"
                   className="font-normal flex items-center gap-1 w-fit-content py-1.5"
                 >
-                  <Calendar className="h-4 w-4" />
+                  <Clock className="h-4 w-4" />
                   {format(new Date(project.createdDate), "MMM dd, yyyy")}
                 </Badge>
               </div>

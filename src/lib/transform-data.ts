@@ -21,7 +21,8 @@ export const transformTaskData = (task: any) => ({
   priority: task.priority ? priorityToEnum[task.priority] : null,
   status: task.status ? statusToEnum[task.status] : null,
   assignees: task.assignees.map(transformAssigneeData) || [],
-  comments: task.comments?.map(transformCommentData) || []
+  comments: task.comments?.map(transformCommentData) || [],
+  project: task.project && transformProjectDetails(task.project)
 })
 
 export const transformListData = (list: any) => ({

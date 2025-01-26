@@ -9,7 +9,7 @@ import Header from "@/components/header"
 
 export default function MembersPage() {
   const { toast } = useToast()
-  const members = []
+  const members: any = []
 
   const handleOnAddMember = () => {
     toast({

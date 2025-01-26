@@ -56,7 +56,7 @@ export default function ProjectDetailsPage() {
         actions={project ? <ProjectDetailsDrawer project={project} /> : null}
       />
       <motion.main
-        className="p-5 flex-1"
+        className="p-5 flex-1 h-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
