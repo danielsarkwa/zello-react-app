@@ -24,7 +24,7 @@ import { coordinateGetter } from "@/components/multipleContainersKeyboardPreset"
 
 import { TaskListWithDetails } from "@/schemas/task-list"
 import { Task } from "@/schemas/tasks"
-import CreateListDialog from "./create-list-dialog"
+import CreateListDialog from "./dialogs/create-list-dialog"
 
 interface KanbanBoardProps {
   lists: TaskListWithDetails[]
@@ -36,6 +36,8 @@ export function KanbanBoard({ lists }: KanbanBoardProps) {
   const [columns, setColumns] = useState(lists)
   const pickedUpTaskColumn = useRef<ColumnId | null>(null)
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
+
+  console.log(lists)
 
   const [tasks, setTasks] = useState<Task[]>([])
 
@@ -158,7 +160,12 @@ export function KanbanBoard({ lists }: KanbanBoardProps) {
           {columns.map((col) => (
             <BoardColumn
               key={col.id}
-              column={{ id: col.id, name: col.name, position: col.position }}
+              column={{
+                id: col.id,
+                name: col.name,
+                position: col.position,
+                projectId: col.projectId
+              }}
               tasks={col.tasks || []}
             />
           ))}

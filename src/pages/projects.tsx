@@ -1,6 +1,6 @@
 import { Link } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
-import CreateProjectDialog from "@/components/create-project-dialog"
+import CreateProjectDialog from "@/components/dialogs/create-project-dialog"
 import EmptyState from "@/components/empty-state"
 import ProjectList from "@/components/project-list"
 import ProjectListSkeleton from "@/components/projectListSkeleton"

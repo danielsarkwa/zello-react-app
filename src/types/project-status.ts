@@ -15,4 +15,10 @@ export enum ProjectStatusEnum {
   Completed = 2
 }
 
+export const PROJECT_STATUS_OPTIONS = [
+  { value: ProjectStatusEnum.NotStarted, label: "Not Started" },
+  { value: ProjectStatusEnum.InProgress, label: "In Progress" },
+  { value: ProjectStatusEnum.Completed, label: "Completed" }
+]
+
 export const ProjectStatus = z.nativeEnum(ProjectStatusEnum)

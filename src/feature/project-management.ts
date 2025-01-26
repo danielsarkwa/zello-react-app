@@ -56,6 +56,21 @@ export function getProjectDetails(projectId: string) {
   }
 }
 
+export function deleteProject(projectId: string) {
+  const queryClient = useQueryClient()
+  const handleError = useErrorHandler()
+
+  return useMutation({
+    mutationFn: ProjectService.deleteProject,
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: projectQueryKey(projectId) })
+    },
+    onError: (error: StandardError) => {
+      handleError(error)
+    }
+  })
+}
+
 export function createList(projectId: string) {
   const queryClient = useQueryClient()
   const handleError = useErrorHandler()

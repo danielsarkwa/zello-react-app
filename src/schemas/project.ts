@@ -14,7 +14,7 @@ export const projectSchema = z.object({
 })
 
 export const ProjectWithDetailsSchema = projectSchema.extend({
-  lists: z.lazy(() => z.array(taskListSchema)),
+  lists: z.lazy(() => z.array(TaskListWithDetailsSchema)),
   members: z.lazy(() => z.array(projectMemberSchema))
 })
 
@@ -33,7 +33,7 @@ export const createProjectFormSchema = createProjectSchema.pick({
   description: true
 })
 
-import { taskListSchema } from "@/schemas/task-list"
+import { TaskListWithDetailsSchema } from "@/schemas/task-list"
 import { projectMemberSchema } from "@/schemas/project-member"
 
 export type Project = z.infer<typeof projectSchema>

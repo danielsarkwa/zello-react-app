@@ -1,7 +1,7 @@
 import * as React from "react"
 import { useLocation } from "react-router"
 
-import { Gauge, LayoutList, Users, FolderKanban } from "lucide-react"
+import { Gauge, Users, FolderKanban } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
@@ -17,11 +17,6 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
       title: "Dashboard",
       url: "/dashboard",
       icon: Gauge
-    },
-    {
-      title: "Task Board",
-      url: "/task-board",
-      icon: LayoutList
     },
     {
       title: "Projects",

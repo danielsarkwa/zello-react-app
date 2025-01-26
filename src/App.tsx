@@ -64,7 +64,6 @@ function App() {
 
         {/* Main routes */}
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="task-board" element={<TaskBoardPage />} />
         <Route path="/projects">
           <Route index element={<ProjectsPage />} />
           <Route path=":projectId" element={<ProjectDetailsPage />} />

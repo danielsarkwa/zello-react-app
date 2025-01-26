@@ -6,43 +6,12 @@ import {
   ProjectWithDetails,
   ProjectWithDetailsSchema
 } from "@/schemas/project"
-
-const transformTaskData = (task: any) => ({
-  ...task,
-  projectId: task.project_id,
-  listId: task.list_id,
-  createdDate: task.created_date
-})
-
-const transformListData = (list: any) => ({
-  ...list,
-  projectId: list.project_id,
-  createdDate: list.created_date,
-  tasks: list.tasks?.map(transformTaskData)
-})
-
-const transformMemberData = (member: any) => ({
-  ...member,
-  projectId: member.project_id,
-  workspaceMemberId: member.workspace_member_id,
-  accessLevel: member.access_level,
-  createdDate: member.created_date
-})
-
-const transformProjectData = (project: any) => ({
-  ...project,
-  workspaceId: project.workspace_id,
-  startDate: project.start_date,
-  endDate: project.end_date,
-  createdDate: project.created_date,
-  lists: project.lists?.map(transformListData) || [],
-  members: project.members?.map(transformMemberData) || []
-})
+import { transformListData, transformProjectDetails } from "@/lib/transform-data"
 
 const getWorkspaceProjects = async (workspaceId: string): Promise<ProjectWithDetails[]> => {
   const response = await api.get(`/workspaces/${workspaceId}/projects`)
 
-  const transformData = response.data.map(transformProjectData)
+  const transformData = response.data.map(transformProjectDetails)
 
   const validatedData = ProjectResponseSchema.safeParse(transformData)
 
@@ -59,7 +28,7 @@ const createProject = async (data: CreateProjectValues): Promise<ProjectWithDeta
     workspace_id: data.workspaceId
   })
 
-  const transformData = transformProjectData(response.data)
+  const transformData = transformProjectDetails(response.data)
 
   const validatedData = ProjectWithDetailsSchema.safeParse(transformData)
 
@@ -73,7 +42,7 @@ const createProject = async (data: CreateProjectValues): Promise<ProjectWithDeta
 const getProjectDetails = async (projectId: string): Promise<ProjectWithDetails> => {
   const response = await api.get(`/project/${projectId}`)
 
-  const transformData = transformProjectData(response.data)
+  const transformData = transformProjectDetails(response.data)
 
   const validatedData = ProjectWithDetailsSchema.safeParse(transformData)
 
@@ -101,11 +70,16 @@ const createList = async (projectId: string, data: CreateListValues) => {
   return validatedData.data
 }
 
+const deleteProject = async (projectId: string): Promise<void> => {
+  await api.delete(`/project/${projectId}`)
+}
+
 const ProjectService = {
   getWorkspaceProjects,
   createProject,
   getProjectDetails,
-  createList
+  createList,
+  deleteProject
 }
 
 export default ProjectService

@@ -6,15 +6,16 @@ import { TaskCard } from "@/components/task-card"
 import { cva } from "class-variance-authority"
 import { Card, CardContent, CardHeader } from "./ui/card"
 import { Button } from "./ui/button"
-import { Ellipsis, GripVertical, Plus } from "lucide-react"
+import { Ellipsis, GripVertical } from "lucide-react"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-
 import { Task } from "@/schemas/tasks"
+import CreateTaskDialog from "./dialogs/create-task-dialog"
 
 export interface Column {
   id: UniqueIdentifier
   name: string
   position: number
+  projectId: string
 }
 
 export type ColumnType = "Column"
@@ -52,7 +53,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
   }
 
   const variants = cva(
-    "h-[660px] max-h-[660px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
+    "h-[calc(100vh-12rem)] w-[350px] bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
     {
       variants: {
         dragging: {
@@ -75,10 +76,10 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
       <CardHeader className="p-4 font-semibold border-b-[1px] flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2">
           <Button
-            variant={"ghost"}
+            variant="ghost"
             {...attributes}
             {...listeners}
-            className=" p-1 text-primary/50 -ml-2 h-auto cursor-grab relative"
+            className="p-1 text-primary/50 -ml-2 h-auto cursor-grab relative"
             title="Reorder List"
           >
             <span className="sr-only">{`Move column: ${column.name}`}</span>
@@ -87,22 +88,21 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
           <span>{column.name}</span>
         </div>
         <div className="flex flex-row items-center gap-1">
-            <Button variant="ghost" className="h-8 w-8" title="Add Task">
-            <Plus />
-            </Button>
+          <CreateTaskDialog listId={column.id as string} projectId={column.projectId} />
           <Button variant="ghost" className="h-8 w-8">
             <Ellipsis />
           </Button>
         </div>
       </CardHeader>
-      <ScrollArea>
-        <CardContent className="flex flex-grow flex-col gap-2 p-2">
+      <ScrollArea className="flex-1">
+        <CardContent className="flex flex-col gap-2 p-2">
           <SortableContext items={tasksIds}>
             {tasks.map((task) => (
               <TaskCard key={task.id} task={task} />
             ))}
           </SortableContext>
         </CardContent>
+        <ScrollBar />
       </ScrollArea>
     </Card>
   )
@@ -111,7 +111,7 @@ export function BoardColumn({ column, tasks, isOverlay }: BoardColumnProps) {
 export function BoardContainer({ children }: { children: React.ReactNode }) {
   const dndContext = useDndContext()
 
-  const variations = cva("px-2 md:px-0 flex lg:justify-center pb-4 flex-1", {
+  const variations = cva("h-full flex lg:justify-center", {
     variants: {
       dragging: {
         default: "snap-x snap-mandatory",
@@ -121,12 +121,14 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
   })
 
   return (
-    <ScrollArea
-      className={variations({
-        dragging: dndContext.active ? "active" : "default"
-      })}
-    >
-      <div className="flex gap-4 items-start flex-row justify-center">{children}</div>
+    <ScrollArea className="h-full">
+      <div
+        className={variations({
+          dragging: dndContext.active ? "active" : "default"
+        })}
+      >
+        <div className="flex gap-4 items-start p-4 min-w-full">{children}</div>
+      </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   )
