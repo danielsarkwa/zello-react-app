@@ -10,7 +10,7 @@ const isDevelopment = import.meta.env.MODE === "development"
 let baseURL = "http://localhost:4321/api/v1"
 
 if (!isDevelopment) {
-  baseURL = process.env.VITE_API_BASE_URL as string
+  baseURL = import.meta.env.VITE_API_BASE_URL
 }
 
 const api = axios.create({
