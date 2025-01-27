@@ -41,9 +41,8 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
         <WorkspaceSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={mainNavItems} /> {/* encapsulate nav logic to component */}
+        <NavMain items={mainNavItems} />
         <NavProjects />
-        {/* add primary botton to add new task */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
