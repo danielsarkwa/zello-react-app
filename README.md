@@ -2,6 +2,11 @@
 
 Zello is a modern project management system inspired by tools like Trello and Jira. The frontend application provides an intuitive interface for managing projects, tasks, and team collaboration, built with React, TypeScript, and modern web technologies.
 
+## Live Demo
+
+- Application is live and can be accessed here 🌐 - https://zello-frontend.onrender.com
+- Short Demo 🎥 - https://vimeo.com/1050608373?share=copy
+
 ## Tech Stack
 
 - **Framework**: React with TypeScript
