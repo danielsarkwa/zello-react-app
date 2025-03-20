@@ -7,6 +7,12 @@ Zello is a modern project management system inspired by tools like Trello and Ji
 - Application is live and can be accessed here 🌐 - https://zello-frontend.onrender.com
 - Short Demo 🎥 - https://vimeo.com/1050608373?share=copy
 
+<img width="1553" alt="Screenshot 2025-03-20 at 5 56 59 PM" src="https://github.com/user-attachments/assets/657b96c3-5446-4917-b7e9-711a8a69e46f" />
+
+<img width="1553" alt="Screenshot 2025-03-20 at 5 57 37 PM" src="https://github.com/user-attachments/assets/0001c0e8-2e94-4aaf-b9f4-8556ad769c55" />
+
+<img width="1553" alt="Screenshot 2025-03-20 at 5 57 47 PM" src="https://github.com/user-attachments/assets/b342ed33-c0cf-4efc-8e4e-e8f102f05195" />
+
 ## Tech Stack
 
 - **Framework**: React with TypeScript
